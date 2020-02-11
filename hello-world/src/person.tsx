@@ -3,14 +3,10 @@ import React from "react";
 
 export default function Person(props: {
     name: string,
-    initialAge: number,
+    age: number,
+    growUp: () => void,
 }) {
-    const { name, initialAge } = props;
-    const [age, setAge] = React.useState(initialAge);
-
-    function growUp() {
-        setAge(age + 1);
-    }
+    const { name, age, growUp } = props;
 
     const canText = age >= 18 ? "can" : "can't";
     return (
@@ -22,3 +18,20 @@ export default function Person(props: {
         </div>
     )
 }
+
+
+Person.defaultProps = {
+    name: 'John Doe',
+};
+
+
+
+
+
+
+
+
+
+
+
+

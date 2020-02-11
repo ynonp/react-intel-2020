@@ -32,21 +32,21 @@ export default function TimeConverter() {
     return (
         <div className="multi-input">
             <TimeInput
-                seconds={+seconds}
+                seconds={seconds}
                 factor={1}
                 handleTextChanged={handleTextChanged}
                 labelText={"Seconds: "}
             />
 
             <TimeInput
-                seconds={Number(seconds)}
+                seconds={seconds}
                 factor={60}
                 handleTextChanged={handleTextChanged}
                 labelText={"Minutes: "}
             />
 
             <TimeInput
-                seconds={Number(seconds)}
+                seconds={seconds}
                 factor={3600}
                 handleTextChanged={handleTextChanged}
                 labelText={"Hours: "}
