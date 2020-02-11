@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import Person from "./person";
 
 export default function People() {
-    const [ages, setAges] = useState([0, 5, 0, 0]);
+    const [ages, setAges] = useState([0, 5, 0, 10, 22, 1]);
 
     function growUp(index: number) {
         const newAges = [...ages];
@@ -15,10 +15,15 @@ export default function People() {
     return (
         <>
             <p>The sum of the ages is: {sum}</p>
-            <Person age={ages[0]} growUp={() => growUp(0)} />
-            <Person age={ages[1]} growUp={() => growUp(1)} />
-            <Person age={ages[2]} growUp={() => growUp(2)} />
-            <Person age={ages[3]} growUp={() => growUp(3)} />
+            {
+                ages.map((age, index) => (
+                    <Person
+                        key={index}
+                        age={age}
+                        growUp={() => growUp(index)}
+                    />
+                ))
+            }
         </>
     )
 }
