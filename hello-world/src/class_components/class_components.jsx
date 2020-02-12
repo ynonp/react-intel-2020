@@ -17,7 +17,7 @@ class AnotherCounter extends React.Component {
   }
 }
 
-export default class Counter extends React.Component {
+class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = { count: 0, step: 1 };
@@ -46,4 +46,15 @@ export default class Counter extends React.Component {
       </div>
     )
   }
+}
+
+
+export default function Demo() {
+  return (
+    <div>
+      <Counter/>
+      <AnotherCounter/>
+      <AnotherCounter/>
+    </div>
+  )
 }

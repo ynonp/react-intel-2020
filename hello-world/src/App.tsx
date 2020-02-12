@@ -33,6 +33,7 @@ function App() {
                 {/*<img src="https://robohash.org/four" />*/}
             {/*</ImageSlider>*/}
             <FnDemo/>
+            <hr />
             <ClassDemo/>
         </div>
     );
