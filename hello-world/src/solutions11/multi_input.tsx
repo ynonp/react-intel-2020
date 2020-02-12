@@ -2,6 +2,7 @@ import React, {useState} from "react";
 
 export default function MultiInput() {
     const [text, setText] = useState('');
+
     function handleTextChanged(e: React.ChangeEvent<HTMLInputElement>) {
         setText(e.target.value);
     }
