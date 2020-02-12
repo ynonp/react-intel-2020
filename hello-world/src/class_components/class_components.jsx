@@ -1,8 +1,19 @@
 import React from "react";
 
 class AnotherCounter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    // debugger;
+    this.setState(oldState => ({ count: oldState.count + 1 }));
+  }
+
   render() {
-    return <button onClick={this.inc}>Clicked: {this.state.clicks} times</button>;
+    return <button onClick={this.handleClick}>Clicked: {this.state.count} times</button>;
   }
 }
 
