@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 type Board = number[][];
@@ -18,7 +17,7 @@ interface Submarine {
       { direction: 'vertical', length: 3, id: -1    },
     ]
  */
-function Sidebar(props: { submarines: Submarine[] }) {
+function Sidebar(/*props: { submarines: Submarine[] }*/) {
     return (
         <div></div>
     )
@@ -32,28 +31,42 @@ function Sidebar(props: { submarines: Submarine[] }) {
  * ]
  */
 function MainGrid(props: { board: Board }) {
+  const { board } = props;
+
   return (
-      <div></div>
+      <div>
+        <table>
+          {
+            board.map((row) => (<tr> {row.map((cell) => (
+             <td className="gridcell">{cell != 0 ? cell : ''}</td>
+              )
+              )}</tr>))
+          }
+        </table>
+      </div>
   )
 }
 
-function App() {
+const initialBoard= [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 1, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 2, 0, 0],
+  [0, 0, 0, 0, 0, 0, 2, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+]
+
+
+
+  function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <table>
+        <tr>
+          <td><Sidebar></Sidebar></td>
+          <td><MainGrid board={initialBoard}></MainGrid></td>
+        </tr>
+      </table>
+      
     </div>
   );
 }
