@@ -4,21 +4,48 @@ import './App.css';
 
 type Board = number[][];
 
+type Direction = "vertical" | "horizontal";
+
 interface Submarine {
-    direction: 'horizontal' | 'vertical',
+    direction: Direction,
     length: number,
     id: number,
+    name: string,
+}
+
+function Submarine(props: { submarine: Submarine }) {
+    const { submarine } = props;
+    return (
+        <img
+            src={`https://robohash.org/${submarine.name}?size=50x50`}
+        />
+    )
+}
+
+function createSubmarine(
+    direction: Direction, length: number, name: string, id=-1): Submarine {
+    return {
+        direction,
+        length,
+        id,
+        name,
+    };
 }
 
 function Sidebar(props: {}) {
     const submarines = [
-        { direction: 'horizontal', length: 4, id: -1  },
-        { direction: 'horizontal', length: 2, id: -1, },
-        { direction: 'vertical', length: 2, id: -1,   },
-        { direction: 'vertical', length: 3, id: -1    },
+        createSubmarine('horizontal', 2, 'Paris'),
+        createSubmarine('horizontal', 4, 'New York'),
+        createSubmarine('vertical', 3, 'Barcelona'),
+        createSubmarine('vertical', 5, 'London'),
     ];
     return (
-        <div className="sidebar"></div>
+        <div className="sidebar">
+            {submarines.map(sub => (
+                <Submarine submarine={sub} />
+            ))}
+
+        </div>
     )
 }
 
