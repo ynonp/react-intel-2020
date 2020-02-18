@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 
 type Board = number[][];
@@ -12,13 +12,19 @@ interface Submarine {
 
 function Sidebar(props: {}) {
     const submarines = [
-        { direction: 'horizontal', length: 4, id: -1  },
-        { direction: 'horizontal', length: 2, id: -1, },
-        { direction: 'vertical', length: 2, id: -1,   },
-        { direction: 'vertical', length: 3, id: -1    },
+        { direction: 'horizontal', length: 4, id: 88  },
+        { direction: 'horizontal', length: 2, id: 89, },
+        { direction: 'vertical', length: 2, id: 90,   },
+        { direction: 'vertical', length: 3, id: 91    },
     ];
     return (
-        <div className="sidebar"></div>
+        <div className="sidebar">
+            {
+            submarines.map((item)=>(
+            <img src={`https://robohash.org/${item.id}.png?size=50x50`} />
+            ))
+            }
+        </div>
     )
 }
 
