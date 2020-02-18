@@ -18,9 +18,12 @@ interface Submarine {
     ]
  */
 function Sidebar(props: { submarines: Submarine[] }) {
-    return (
-        <div></div>
-    )
+
+  return (
+      <div>
+      
+      </div>
+  )
 }
 
 /**
@@ -31,28 +34,57 @@ function Sidebar(props: { submarines: Submarine[] }) {
  * ]
  */
 function MainGrid(props: { board: Board }) {
+  const {board} = props;
+  
   return (
-      <div></div>
+      <div>
+        <table>
+          {
+            board.map(
+            (row,rowIndex)=>(
+              <tr>
+                {
+                  row.map(
+                    (col,colIndex)=>(
+                      <td>{col>0?col:null}</td>
+                    )
+                  )
+                }
+              </tr>
+            )
+            ) 
+          }
+        </table>
+      </div>
   )
 }
 
+const initialBoard = [
+     [0, 0, 0, 0, 0, 0],
+     [0, 0, 1, 0, 0, 0],
+     [0, 0, 0, 3, 3, 3],
+     [0, 2, 0, 0, 0, 0],
+     [0, 2, 0, 0, 0, 0],
+     [0, 0, 0, 0, 0, 0],
+];
+
+const submarins=[
+  { direction: 'horizontal', length: 4, id: 1 } as Submarine,
+  { direction: 'horizontal', length: 2, id: 2 } as Submarine,
+  { direction: 'vertical',   length: 2, id: 3 } as Submarine,
+  { direction: 'vertical',   length: 3, id: 4 } as Submarine,
+]
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <div>
+          <Sidebar submarines={submarins} />
+        </div>
+        <div>
+          <MainGrid board={initialBoard} />
+        </div>
+      </div>
     </div>
   );
 }
