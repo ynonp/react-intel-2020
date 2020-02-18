@@ -14,11 +14,9 @@ interface IDataFilm {
     characters: string,
 }
 
-type AllData = null|IData|IDataFilm;
-
 // useRemoteData is called a Custom Hook
-function useRemoteData(endpoint: string, id: string): AllData {
-    const [data, setData] = useState<AllData>(null);
+function useRemoteData<T>(endpoint: string, id: string) {
+    const [data, setData] = useState<T|null>(null);
 
     useEffect(function() {
         setData(null);
@@ -45,7 +43,7 @@ function useRemoteData(endpoint: string, id: string): AllData {
 function FilmInfo(props: { id: string }) {
     const { id } = props;
     // Get character data ???
-    const data = (useRemoteData('films', id) as IDataFilm);
+    const data = useRemoteData<IDataFilm>('films', id);
 
     if (data === null) {
         return <p>Loading, please wait...</p>
@@ -72,7 +70,7 @@ function parse(filmUrl: string): string {
 
 function CharacterInfo(props: { id: string }) {
     const { id } = props;
-    const data = (useRemoteData('people', id) as IData);
+    const data = useRemoteData<IData>('people', id);
 
     // Get character data ???
     if (data === null) {
