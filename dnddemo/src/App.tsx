@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -10,17 +10,15 @@ interface Submarine {
     id: number,
 }
 
-/*
-    submarines: [
-      { direction: 'horizontal', length: 4, id: -1  },
-      { direction: 'horizontal', length: 2, id: -1, },
-      { direction: 'vertical', length: 2, id: -1,   },
-      { direction: 'vertical', length: 3, id: -1    },
-    ]
- */
-function Sidebar(props: { submarines: Submarine[] }) {
+function Sidebar(props: {}) {
+    const submarines = [
+        { direction: 'horizontal', length: 4, id: -1  },
+        { direction: 'horizontal', length: 2, id: -1, },
+        { direction: 'vertical', length: 2, id: -1,   },
+        { direction: 'vertical', length: 3, id: -1    },
+    ];
     return (
-        <div></div>
+        <div className="sidebar"></div>
     )
 }
 
@@ -31,29 +29,37 @@ function Sidebar(props: { submarines: Submarine[] }) {
  *   [0, 0, 0, 2, 0, 0],
  * ]
  */
-function MainGrid(props: { board: Board }) {
-  return (
-      <div></div>
+type SetBoardFn = (_: Board) => void;
+function MainGrid(props: { board: Board, setBoard: SetBoardFn }) {
+    const { board, setBoard } = props;
+
+    return (
+      <div className="grid">
+          {board.map((row, rowIndex) => (
+              <tr>
+                  {row.map((item, columnIndex) => (
+                      <td>{item !== 0 ? item : ''}</td>
+                  ))}
+              </tr>
+          ))}
+      </div>
   )
 }
+const initialBoard = [
+    [0, 0, 0, 0, 1, 1],
+    [0, 0, 0, 2, 0, 0],
+    [0, 0, 0, 2, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+];
 
 function App() {
+    const [board, setBoard] = useState(initialBoard);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Sidebar />
+        <MainGrid board={board} setBoard={setBoard} />
     </div>
   );
 }
