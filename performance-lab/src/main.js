@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import tinycolor from 'tinycolor2';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
-function ColorBox(props) {
+const ColorBox = React.memo(function ColorBox(props) {
   const { start, spin, onClick, id } = props;
   const color = tinycolor(start).spin(spin).toString();
   console.log('ColorBox');
@@ -21,19 +21,20 @@ function ColorBox(props) {
         margin: '5px',
       }} >{id}</div>
   );
-}
+});
 
 function ColorPalette(props) {
   console.log('ColorPalette');
 
   const { start } = props;
   const [deletedBoxes, setDeletedBoxes] = useState(new Set());
+  const [forceUpdate, setForceUpdate] = useState(false);
 
-  function removeBox(e) {
+  const removeBox = useCallback(function removeBox(e) {
     const id = e.target.dataset.id;
     deletedBoxes.add(Number(id));
-    setDeletedBoxes(new Set(deletedBoxes));
-  }
+    setForceUpdate(v => !v);
+  }, [deletedBoxes]);
 
   const colors = [];
   for (let i=-360; i < 360; i++) {
@@ -45,20 +46,27 @@ function ColorPalette(props) {
         spin={i}
         onClick={removeBox}
         id={i}
+        key={i}
       />
     );
   }
   return colors;
 }
 
-function ColorSelector(props) {
+function Counter(props) {
   const [ticks, setTicks] = useState(0);
+  return (
+    <button onClick={() => setTicks(v => v + 1)}>Click Me ... {ticks}</button>
+  );
+}
+
+function ColorSelector(props) {
   const [color, setColor] = useState('#000000');
   console.log('ColorSelector');
   return (
     <div>
-      <button onClick={() => setTicks(v => v + 1)}>Click Me ... {ticks}</button>
       <div>
+        <Counter />        
         <input type="color" value={color} onChange={(e) => setColor(e.target.value) } />
       </div>
       <ColorPalette start={color} />
