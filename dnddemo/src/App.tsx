@@ -4,7 +4,7 @@ import './App.css';
 type Board = number[][];
 
 interface Submarine {
-    direction: 'horizontal' | 'vertical',
+    direction: string,
     length: number,
     id: number,
 }
@@ -18,10 +18,18 @@ interface Submarine {
     ]
  */
 function Sidebar(props: { submarines: Submarine[] }) {
-
+  const { submarines } = props;
   return (
-      <div>
-      
+      <div className="sub-div">
+        {
+          submarines.map(
+            (sub,index)=>(
+              <div > 
+                <img src={"https://robohash.org/"+sub.id}></img>
+              </div>
+            )
+          )
+        }
       </div>
   )
 }
@@ -37,7 +45,7 @@ function MainGrid(props: { board: Board }) {
   const {board} = props;
   
   return (
-      <div>
+      <div className="sub-div">
         <table>
           {
             board.map(
@@ -68,18 +76,19 @@ const initialBoard = [
      [0, 0, 0, 0, 0, 0],
 ];
 
-const submarins=[
-  { direction: 'horizontal', length: 4, id: 1 } as Submarine,
-  { direction: 'horizontal', length: 2, id: 2 } as Submarine,
-  { direction: 'vertical',   length: 2, id: 3 } as Submarine,
-  { direction: 'vertical',   length: 3, id: 4 } as Submarine,
+const submarins_array=[
+  { direction: 'horizontal', length: 4, id: 1 },
+  { direction: 'horizontal', length: 2, id: 2 },
+  { direction: 'vertical',   length: 2, id: 3 },
+  { direction: 'vertical',   length: 3, id: 4 },
+  { direction: 'vertical',   length: 1, id: 5 },
 ]
 function App() {
   return (
     <div className="App">
       <div>
         <div>
-          <Sidebar submarines={submarins} />
+          <Sidebar submarines={submarins_array} />
         </div>
         <div>
           <MainGrid board={initialBoard} />
