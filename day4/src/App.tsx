@@ -15,6 +15,7 @@ function App() {
             <div className="App">
                 <NewItemBox />
                 <ItemsList />
+                <ItemsList />
                 <TotalStuffTodo />
             </div>
         </Provider>

@@ -18,6 +18,7 @@ function MyItem(props: { onClick: any, item: Item, index: number }) {
                 onClick={onClick}
             />
             {item.name}
+            <button>X</button>
         </label>
     );
 }
