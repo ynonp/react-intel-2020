@@ -24,7 +24,8 @@ export interface IState {
 
 type IAction =
     { type: '@@NEW_ITEM', payload: string } |
-    { type: '@@TOGGLE_ITEM', payload: number }
+    { type: '@@TOGGLE_ITEM', payload: number } |
+    { type: '@@REMOVE_ITEM', payload: number}
 
 
 function reducer(state: (IState|undefined) = initialState, action: IAction) {
@@ -34,10 +35,15 @@ function reducer(state: (IState|undefined) = initialState, action: IAction) {
 
         case '@@TOGGLE_ITEM':
             return toggleItem(state, action);
-
+        case '@@REMOVE_ITEM':
+            return removeItem(state,action);
         default:
             return state;
     }
+}
+
+function removeItem(state: IState, { payload }: IAction) {
+    return {items: state.items.filter(x=>x.id != Number(payload))}
 }
 
 function newItem(state: IState = initialState, action: IAction ) {

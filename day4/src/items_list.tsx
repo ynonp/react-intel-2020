@@ -8,8 +8,8 @@ function getStateFromStore(state: IState) {
     }
 }
 
-function MyItem(props: { onClick: any, item: Item, index: number }) {
-    const { item, index, onClick } = props;
+function MyItem(props: { onClick: any,RemoveItem:any, item: Item, index: number }) {
+    const { item, index, onClick, RemoveItem } = props;
     return (
         <label>
             <input
@@ -18,7 +18,7 @@ function MyItem(props: { onClick: any, item: Item, index: number }) {
                 onClick={onClick}
             />
             {item.name}
-            <button>X</button>
+            <button onClick={RemoveItem}>X</button>
         </label>
     );
 }
@@ -31,19 +31,27 @@ function ItemsList({ items, dispatch }: { items: Item[], dispatch: IDispatch }) 
         });
     }
 
-    return (
-        <ul>
-            {items.map((item, index) => (
-                <li key={item.id}>
-                    <MyItem
-                        item={item}
-                        index={index}
-                        onClick={() => clickedOnItem(index)}
-                    />
-                </li>
-            ))}
-        </ul>
-    )
-}
+        function RemoveItem(index: number) {
+            dispatch({
+                type: "@@REMOVE_ITEM",
+                payload: index,
+            });
+        }
+
+        return (
+            <ul>
+                {items.map((item, index) => (
+                    <li key={item.id}>
+                        <MyItem
+                            item={item}
+                            index={index}
+                            onClick={() => clickedOnItem(index)}
+                            RemoveItem={() => RemoveItem(item.id)}
+                        />
+                    </li>
+                ))}
+            </ul>
+        )
+    }
 
 export default connect(getStateFromStore)(ItemsList);
