@@ -8,8 +8,8 @@ function getStateFromStore(state: IState) {
     }
 }
 
-function MyItem(props: { onClick: any, item: Item, index: number }) {
-    const { item, index, onClick } = props;
+function MyItem(props: {onDeleteItem:any,  onClick: any, item: Item, index: number }) {
+    const { item, index, onClick, onDeleteItem } = props;
     return (
         <label>
             <input
@@ -18,7 +18,7 @@ function MyItem(props: { onClick: any, item: Item, index: number }) {
                 onClick={onClick}
             />
             {item.name}
-            <button>X</button>
+            <button onClick={onDeleteItem}>X</button>
         </label>
     );
 }
@@ -31,6 +31,13 @@ function ItemsList({ items, dispatch }: { items: Item[], dispatch: IDispatch }) 
         });
     }
 
+    function deleteItem(index:number){
+        dispatch({
+            type: "@@DELETE_ITEM",
+            payload: index,
+        });
+    }
+
     return (
         <ul>
             {items.map((item, index) => (
@@ -39,6 +46,7 @@ function ItemsList({ items, dispatch }: { items: Item[], dispatch: IDispatch }) 
                         item={item}
                         index={index}
                         onClick={() => clickedOnItem(index)}
+                        onDeleteItem={() => deleteItem(item.id)}
                     />
                 </li>
             ))}
