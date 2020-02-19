@@ -7,6 +7,7 @@ import { Provider, connect } from "react-redux";
 import NewItemBox from "./new_item_box";
 import ItemsList from "./items_list";
 import TotalStuffTodo from "./total_stuff_todo";
+import StarwarsCharacter from "./starwars_character";
 
 
 function App() {
@@ -15,6 +16,8 @@ function App() {
             <div className="App">
                 <NewItemBox />
                 <ItemsList />
+                <StarwarsCharacter />
+                <hr />
                 <ItemsList />
                 <TotalStuffTodo />
             </div>
