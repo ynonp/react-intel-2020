@@ -8,8 +8,12 @@ function getStateFromStore(state: IState) {
     }
 }
 
-function MyItem(props: { onClick: any, item: Item, index: number }) {
-    const { item, index, onClick } = props;
+function MyItem(props: {
+    onClick: any,
+    item: Item,
+    onDelete: any,
+}) {
+    const { item, onClick, onDelete } = props;
     return (
         <label>
             <input
@@ -18,17 +22,24 @@ function MyItem(props: { onClick: any, item: Item, index: number }) {
                 onClick={onClick}
             />
             {item.name}
-            <button>X</button>
+            <button onClick={onDelete}>X</button>
         </label>
     );
 }
 
 function ItemsList({ items, dispatch }: { items: Item[], dispatch: IDispatch }) {
-    function clickedOnItem(index: number) {
+    function clickedOnItem(id: number) {
         dispatch({
             type: "@@TOGGLE_ITEM",
-            payload: index,
+            payload: id,
         });
+    }
+
+    function removeItem(id: number) {
+        dispatch({
+            type: '@@DELETE_ITEM',
+            payload: id,
+        })
     }
 
     return (
@@ -37,8 +48,8 @@ function ItemsList({ items, dispatch }: { items: Item[], dispatch: IDispatch }) 
                 <li key={item.id}>
                     <MyItem
                         item={item}
-                        index={index}
-                        onClick={() => clickedOnItem(index)}
+                        onClick={() => clickedOnItem(item.id)}
+                        onDelete={() => removeItem(item.id)}
                     />
                 </li>
             ))}
