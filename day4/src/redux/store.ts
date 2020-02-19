@@ -10,13 +10,15 @@ const initialState = {
   ]
 };
 
-interface Item {
+export type IDispatch = (_: IAction) => IAction;
+
+export interface Item {
     name: string,
     done: boolean,
     id: number,
 }
 
-interface IState {
+export interface IState {
     items: Item[],
 }
 
@@ -25,7 +27,7 @@ type IAction =
     { type: '@@TOGGLE_ITEM', payload: number }
 
 
-function reducer(state: (IState|undefined) = initialState, action: IAction): IState {
+function reducer(state: (IState|undefined) = initialState, action: IAction) {
     switch(action.type) {
         case '@@NEW_ITEM':
             return newItem(state, action);
@@ -42,8 +44,8 @@ function newItem(state: IState = initialState, action: IAction ) {
     const { payload } = action;
     return produce(state, (draft) => {
         const newItem = {
-            name: String(payload),
             id: draft.items.length,
+            name: String(payload),
             done: false,
         };
         draft.items.push(newItem);
