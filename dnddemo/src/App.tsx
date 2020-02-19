@@ -1,25 +1,64 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
+import { useDrag, useDrop } from 'react-dnd'
+import Backend from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
+import Demo from "./performance_demo";
+
 
 type Board = number[][];
 
-interface Submarine {
-    direction: 'horizontal' | 'vertical',
-    length: number,
-    id: number,
+type Direction = "vertical" | "horizontal";
+type MyDragItem = {
+    type: string,
+    data: Submarine,
 }
 
-/*
-    submarines: [
-      { direction: 'horizontal', length: 4, id: -1  },
-      { direction: 'horizontal', length: 2, id: -1, },
-      { direction: 'vertical', length: 2, id: -1,   },
-      { direction: 'vertical', length: 3, id: -1    },
-    ]
- */
-function Sidebar(/*props: { submarines: Submarine[] }*/) {
+interface Submarine {
+    direction: Direction,
+    length: number,
+    id: number,
+    name: string,
+}
+
+function Submarine(props: { submarine: Submarine }) {
+    const { submarine } = props;
+    const [_, drag] = useDrag({
+        item: { type: 'submarine', data: submarine },
+    });
+
     return (
-        <div></div>
+        <img
+            src={`https://robohash.org/${submarine.name}?size=50x50`}
+            ref={drag}
+        />
+    )
+}
+
+function createSubmarine(
+    direction: Direction, length: number, name: string, id=-1): Submarine {
+    return {
+        direction,
+        length,
+        id,
+        name,
+    };
+}
+
+function Sidebar(props: {}) {
+    const submarines = [
+        createSubmarine('horizontal', 2, 'Paris'),
+        createSubmarine('horizontal', 4, 'New York'),
+        createSubmarine('vertical', 3, 'Barcelona'),
+        createSubmarine('vertical', 5, 'London'),
+    ];
+    return (
+        <div className="sidebar">
+            {submarines.map(sub => (
+                <Submarine submarine={sub} />
+            ))}
+
+        </div>
     )
 }
 
@@ -30,45 +69,69 @@ function Sidebar(/*props: { submarines: Submarine[] }*/) {
  *   [0, 0, 0, 2, 0, 0],
  * ]
  */
-function MainGrid(props: { board: Board }) {
-  const { board } = props;
 
-  return (
-      <div>
-        <table>
-          {
-            board.map((row) => (<tr> {row.map((cell) => (
-             <td className="gridcell">{cell != 0 ? cell : ''}</td>
-              )
-              )}</tr>))
-          }
-        </table>
+function GridCell(props: { rowIndex: number, columnIndex: number, value: number }) {
+    const { rowIndex, columnIndex, value } = props;
+    const [collectedProps, drop] = useDrop({
+        accept: 'submarine',
+        collect(monitor) {
+            return { background: monitor.isOver() ? 'lightblue' : 'white' };
+        },
+        drop(item: MyDragItem, monitor) {
+            alert(`${item.data.name} -> ${rowIndex}, ${columnIndex}`);
+        }
+    });
+
+    const style = {
+        background: collectedProps.background,
+    };
+
+    return (
+        <td ref={drop} style={style}>{value !== 0 ? value : ''}</td>
+    );
+
+}
+
+type SetBoardFn = (_: Board) => void;
+function MainGrid(props: { board: Board, setBoard: SetBoardFn }) {
+    const { board, setBoard } = props;
+
+    return (
+      <div className="grid">
+          {board.map((row, rowIndex) => (
+              <tr>
+                  {row.map((item, columnIndex) => (
+                      <GridCell
+                          rowIndex={rowIndex}
+                          columnIndex={columnIndex}
+                          value={item}
+                      />
+                  ))}
+              </tr>
+          ))}
       </div>
   )
 }
 
-const initialBoard= [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 1, 1, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 2, 0, 0],
-  [0, 0, 0, 0, 0, 0, 2, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-]
+const initialBoard = [
+    [0, 0, 0, 0, 1, 1],
+    [0, 0, 0, 2, 0, 0],
+    [0, 0, 0, 2, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+];
 
-
-
-  function App() {
-  return (
-    <div>
-      <table>
-        <tr>
-          <td><Sidebar></Sidebar></td>
-          <td><MainGrid board={initialBoard}></MainGrid></td>
-        </tr>
-      </table>
-      
-    </div>
-  );
+function App() {
+    const [board, setBoard] = useState(initialBoard);
+    return (
+        <DndProvider backend={Backend}>
+            <div className="App">
+                <Sidebar />
+                <MainGrid board={board} setBoard={setBoard} />
+            </div>
+        </DndProvider>
+    );
 }
 
-export default App;
+export default Demo;

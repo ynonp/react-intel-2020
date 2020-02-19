@@ -1,5 +1,5 @@
 {
-  "name": "dnddemo",
+  "name": "router-demo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,8 +11,6 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "react": "^16.12.0",
-    "react-dnd": "^10.0.2",
-    "react-dnd-html5-backend": "^10.0.2",
     "react-dom": "^16.12.0",
     "react-scripts": "3.4.0",
     "typescript": "~3.7.2"

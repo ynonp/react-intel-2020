@@ -1,0 +1,22 @@
+.App {
+  font-family: sans-serif;
+  display: flex;
+}
+
+
+.hovering {
+  background: lightblue;
+}
+
+.sidebar {
+  border-right: 1px solid blue;
+  margin-right: 20px;
+  padding-right: 5px;
+}
+
+table td {
+  border: 1px solid black;
+  width: 30px;
+  height: 30px;
+}
+
