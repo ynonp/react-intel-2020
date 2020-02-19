@@ -1,18 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
+import produce from 'immer';
 import './App.css';
-
-function TotalStuffTodo() {
-    return <p>You have {5} things left to buy</p>
-}
-
-function NewItemBox() {
-  return (
-      <div className={"new-item-input"}>
-          <input type={"text"} />
-          <button>Add</button>
-      </div>
-  )
-}
+import "./redux/store";
 
 interface Item {
     name: string,
@@ -20,36 +9,78 @@ interface Item {
     done: boolean,
 }
 
-function ItemsList(props: { items: Item[] }) {
+function TotalStuffTodo(props: { items: Item[] }) {
     const { items } = props;
+    const undone = items.filter(item => !item.done).length;
+
+    return <p>You have {undone} things left to buy</p>
+}
+
+function NewItemBox(props: { addItem: (_:string) => void}) {
+    const { addItem } = props;
+    const [ text, setText ] = useState('');
+
+    return (
+        <div className={"new-item-input"}>
+            <input type={"text"} value={text} onChange={(e) => setText(e.target.value)}/>
+            <button onClick={() => addItem(text)}>Add</button>
+        </div>
+    )
+}
+
+function Item(props: { item: Item, toggleItem: (index: number) => void, index: number }) {
+    const { item, toggleItem, index } = props;
+    return (
+        <label>
+            <input
+                type={"checkbox"}
+                checked={item.done}
+                onChange={() => toggleItem(index)}
+            />
+            {item.name}
+        </label>
+    );
+}
+
+function ItemsList(props: { items: Item[], toggleItem: (index: number) => void }) {
+    const { items, toggleItem } = props;
 
     return (
         <ul>
-            {items.map(item => (
+            {items.map((item, index) => (
                 <li key={item.id}>
-                    <label>
-                        <input type={"checkbox"} checked={item.done} />
-                        {item.name}
-                    </label>
+                    <Item item={item} toggleItem={toggleItem} index={index} />
                 </li>
             ))}
         </ul>
     )
 }
+const initialItems: Item[] = [
+];
 
 function App() {
-    const items = [
-        { id: 1, name: 'tomatoes', done: false },
-        { id: 2, name: 'cucumber', done: true },
-        { id: 3, name: 'bread', done: false },
-    ];
-  return (
-    <div className="App">
-        <NewItemBox/>
-        <ItemsList items={items} />
-        <TotalStuffTodo/>
-    </div>
-  );
+    const [items, setItems] = useState(initialItems);
+
+    function addItem(name: string) {
+        setItems(val => produce(val, draft => {
+            // Run your mutable code on draft => and get Immutable behaviour
+            draft.push({ name, id: items.length, done: false });
+        }));
+    }
+
+    function toggleItem(index: number) {
+        setItems(val => produce(val, draft => {
+            draft[index].done = !draft[index].done;
+        }));
+    }
+
+    return (
+        <div className="App">
+            <NewItemBox addItem={addItem} />
+            <ItemsList items={items} toggleItem={toggleItem} />
+            <TotalStuffTodo items={items}/>
+        </div>
+    );
 }
 
 export default App;
